@@ -1,6 +1,7 @@
 # IMUMocap_toolbox
 
 IMUMocap_toolbox is a matlab-based toolbox used to measure joint kinematics and spatiotemporal parameters during human movement.
+
 <br/><br/>
 
 ## Additional required Matlab toolboxes
@@ -10,6 +11,7 @@ Please note, the following Matlab toolboxes are dependencies of the IMUMocap_too
 * Aerospace Toolbox
 
 While the IMUMocap_toolbox is hevily reliant on the Sensor Fusion and Tracking Toolbox and is strongly recommended, alternate toolboxes may be used in place of the Aerospace Toolbox for quaternion math.
+
 <br/><br/>
 
 
@@ -24,6 +26,7 @@ Magnetic calibrations are named as MC_sensorLastTwoDigits (i.e. "MC14" for senso
 The python script "rename.py" is then run to bulk rename the raw data files (as named in accordance with the above inputs within the Capture.U application) for handling in the IMUMocap_toolbox.
 
 Place all raw data within the main.m file directory under "data/EXERCISE" where "EXERCISE" can take on any name defined according to the allocated variable.
+
 <br/><br/>
 
 ## Data collection procedure
@@ -34,6 +37,7 @@ The following procedure must be adhered to for accurate spatiotemporal and kinem
 * Once landed and still, ask the participant to remain in the anatomical position with feet shoulder-width apart and feet pointing in an anterior/posterior direction for 10-15 seconds. This still position becomes the zero-reference calibration for the trial.
 * The participant is then free to perform the required movement.
 * A magnetic calibration must be undertaken at the conclusion of the senssion. This calibration involves rotating each device around randomly around each of the three axes for approximately one minute. Record separate calibrations for each sensor, one sensor at a time.
+
 <br/><br/>
 
 ## Using the toolkit in a main.m script structure
@@ -64,6 +68,7 @@ For spatiotemporal analysis:
 11. Using the "get_foot_fusion()" function, get the fusion object containing the orientation/acceleration/angular rate of the foot sensor in the segment frame and the initialized event object.
 12. Identify initial contact and final contact events throughout the duration of the trial using the "gait_event()" function.
 13. Input the identified gait events (13) to "estimate_stride()", inturn implementing a zero-velocity update to estimate the stride length parameter.
+
 <br/><br/>
 
 ## Functions
@@ -81,6 +86,7 @@ trial  | String | Trial name (recommended "T01" etc.)
 sensor_location  | String | Sensor name (recommended last four digits of sensor)
 data_type  | String | Data type (Either "highg", "lowg" or "mag")
 mag_cal_iteration | String | Only used if multiple magnetic calibrations for the same sensor were used (must be defined in initialization)
+
 <br/><br/>
 
 ### data_object() -> _returns type object_
@@ -90,6 +96,7 @@ data_object(filenames)
 Parameter | Type | Description
 | :--- | :--- | :---
 filenames  | Object | Object containing the names of each data file from each sensor
+
 <br/><br/>
 
 ### sync_all() -> _returns type object_
@@ -99,6 +106,7 @@ sync_all(data)
 Parameter | Type | Description
 | :--- | :--- | :---
 data  | Object | Object containing the synced data of all sensors used within the trial
+
 <br/><br/>
 
 ### orientation_glob() -> _returns type object_
@@ -113,6 +121,7 @@ mag_cal_filename  | String | File name of the magnetic calibration for the selec
 calibration_start  | Integer | Start frame of calibration
 calibration_end  | Integer | End frame of calibration
 sensor_description  | String | Chose from "proximal", "distal", "base" or "foot" - can be used to set tuning parameters. By default, all parameters are the same but can be changed within the function depending on tuning requirements.
+
 <br/><br/>
 
 ### base_coord_sys() -> _returns type quaternion_
@@ -122,6 +131,7 @@ base_coord_sys(baseStaticFusion)
 Parameter | Type | Description
 | :--- | :--- | :---
 baseStaticFusion  | Object | Object result of orientation_glob() for base sensor
+
 <br/><br/>
 
 ### to_base_frame() -> _returns type quaternion_
@@ -132,6 +142,7 @@ Parameter | Type | Description
 | :--- | :--- | :---
 q_os  | Quaternion | Quaternion orientation of the base sensor in the global frame
 static_fusion  | Object | Orientation object produced by orientation_glob() for the static calibration portion of the trial of a given sensor
+
 <br/><br/>
 
 ### transform_to_segment_frame() -> _returns type object
@@ -142,6 +153,7 @@ Parameter | Type | Description
 | :--- | :--- | :---
 sensor_fusion  | Object | Object created using orientation_glob() for the entire trial of a given sensor
 sensor_origin_orient_quat  | Object | Quaternion result of to_base_frame() establishing original orientation during static calibration of a given sensor
+
 <br/><br/>
 
 ### get_joint_angle() -> _returns type object_
@@ -152,6 +164,7 @@ Parameter | Type | Description
 | :--- | :--- | :---
 proximal_fusion  | Object | Transformed object resulting from transform_to_segment_frame() for proximal sensor
 distal_fusion  | Object | Transformed object resulting from transform_to_segment_frame() for distal sensor
+
 <br/><br/>
 
 ### get_foot_fusion() -> _returns type object_
@@ -163,6 +176,7 @@ Parameter | Type | Description
 q_os  | Quaternion | Quaternion orientation of the base sensor in the global frame
 data  | Object | Object containing the synced data of all sensors used within the trial
 foot_magcal_filename | String | File name of the magnetic calibration for the foot sensor
+
 <br/><br/>
 
 ### gait_event() -> _returns type object_
@@ -174,7 +188,9 @@ Parameter | Type | Description
 foot_fusion  | Object | Result of get_foot_fusion(). Object containing orientation (degree and quaternion) and acceleration/angular rate measures
 start_time  | Double | Timestamp just prior to initial step (sec)
 end_time | Double | Timestamp just after final step (sec)
+
 _NOTE: Within this function exists parameters which must be tuned for a given trial otherwise an error will likely be returned. Best practice is to include plots thoughout the function to visualise output and set parameters accordingly. Parameters are listed at the top within the function._
+
 <br/><br/>
 
 ### estimate_stride() -> _returns type object_
@@ -186,6 +202,7 @@ Parameter | Type | Description
 foot_fusion  | Object | Result of get_foot_fusion(). Object containing orientation (degree and quaternion) and acceleration/angular rate measures
 q_os  | Quaternion | Quaternion orientation of the base sensor in the global frame
 event | Object | Event object created by gait_event() containing an array of initial contact and final contact instances
+
 <br/><br/>
 
 ### get_spatiotemp() -> _returns print to consle_
@@ -198,6 +215,7 @@ foot_fusion  | Object | Result of get_foot_fusion(). Object containing orientati
 event | Object | Event object created by gait_event() containing an array of initial contact and final contact instances
 initial_stance | Integer | Initial stance phase in analysis
 end_stance | Integer | Final stance phase in analysis
+
 <br/><br/>
 
 
